@@ -22,6 +22,8 @@ function request(url, method, body) {
 const app = new Vue({
   el: '#app',
   data: {
+    timer: null,
+    listOfTimer: [],
     toggle: false,
     newMangaText: '',
     listOfManga: [
@@ -41,6 +43,24 @@ const app = new Vue({
     },
   },
   methods: {
+    modifyMangaPageNumber: function (manga, event) {
+      if (event) event.preventDefault()
+
+      clearTimeout(this.listOfTimer[manga.id])
+
+      this.listOfTimer[manga.id] = setTimeout(() => {
+          this.error = null;
+          request('/api/manga/page/' + manga.id, 'PATCH', {
+            pageNum: manga.pageNum
+          })
+            .then(manga => {
+              console.log(manga);
+            })
+            .catch(error => this.error = error);
+      }, 2500)
+
+      // this.mangaPageNumber = -1;
+    },
     addNewManga: function () {
       if (!this.newMangaText) { return; }
 
