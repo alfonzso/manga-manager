@@ -19,7 +19,9 @@
           <div class="url">{{ manga.url }}</div>
         </div>
         <div class="rowRight" >
-          <div class="pageNum">{{ manga.pageNum }}</div>
+          <div class="pageNum">
+            <input type="number" name="tentacles" min="0"  value="{{ manga.pageNum }}" >
+          </div>
           <div class="checkbox-wrapper">
             <input type="checkbox" v-on:click="hideManga(manga, $event)">
           </div>
