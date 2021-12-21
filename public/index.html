@@ -14,17 +14,14 @@
     <div class="box">
       <h1>Manga Manager List</h1>
       <div class="row" v-for="manga in mangas" :key="manga.id">
-        <div class="rowLeft">
-          <div class="star"> * </div>
-          <div class="url">{{ manga.url }}</div>
+        <div class="star"> * </div>
+        <div class="url">{{ manga.url }}</div>
+        <div class="spacer"></div>
+        <div class="pageNum">
+          <input type="number" min="0" :value="manga.pageNum" >
         </div>
-        <div class="rowRight" >
-          <div class="pageNum">
-            <input type="number" name="tentacles" min="0"  value="{{ manga.pageNum }}" >
-          </div>
-          <div class="checkbox-wrapper">
-            <input type="checkbox" v-on:click="hideManga(manga, $event)">
-          </div>
+        <div class="checkbox-wrapper">
+          <input type="checkbox" v-on:click="hideManga(manga, $event)">
         </div>
       </div>
       <div class="row">

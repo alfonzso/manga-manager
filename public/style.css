@@ -41,6 +41,20 @@ body {
   text-align: center;
 }
 
+.pageNum > input {
+  width: 30%;
+  align-content: center;
+  float: right;
+}
+
+.star {
+  padding-right: 10px;
+}
+
+.spacer {
+  margin-left: auto;
+}
+
 .row {
   /* color: black; */
   display: flex;
@@ -51,7 +65,7 @@ body {
   list-style: none;
   justify-content: space-between;
 }
-.rowLeft {
+/* .rowLeft {
   display: flex;
   flex-flow: nowrap;
 
@@ -71,11 +85,8 @@ body {
   padding: 0;
   margin: 0;
   list-style: none;
-}
+} */
 
-.star {
-  padding-right: 10px;
-}
 
 .row:hover {
   background-color: lightgray;
@@ -86,10 +97,10 @@ body {
 }
 
 .checkbox-wrapper {
-  margin-left: 20px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
+  /* margin-left: 20px; */
+  /* display: flex; */
+  /* flex-direction: column; */
+  /* justify-content: center; */
 }
 
 .row:last-of-type {
