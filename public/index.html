@@ -16,11 +16,11 @@
       <div class="row" v-for="manga in mangas" :key="manga.id">
         <div class="rowLeft">
           <div class="star"> * </div>
-          <div class="col url">{{ manga.url }}</div>
+          <div class="url">{{ manga.url }}</div>
         </div>
         <div class="rowRight" >
-          <div class="col pageNum">{{ manga.pageNum }}</div>
-          <div class="col checkbox-wrapper">
+          <div class="pageNum">{{ manga.pageNum }}</div>
+          <div class="checkbox-wrapper">
             <input type="checkbox" v-on:click="hideManga(manga, $event)">
           </div>
         </div>
