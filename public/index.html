@@ -7,13 +7,14 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Manga Manager App</title>
   <link rel="stylesheet" href="style.css">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
 </head>
 
 <body>
   <div id="app">
     <div class="box">
       <h1>Manga Manager List</h1>
-      <div class="row" v-for="manga in mangas" :key="manga.id">
+      <div class="row" v-for="manga in notHiddenMangas" :key="manga.id">
         <div class="star"> * </div>
         <div class="url">{{ manga.url }}</div>
         <div class="spacer"></div>
@@ -26,6 +27,21 @@
       </div>
       <div class="row">
         <input type="text" class="text-input" v-on:keyup.enter="addNewManga" v-model="newMangaText" placeholder="Type a new manga and press Enter">
+      </div>
+    </div>
+
+    <button @click='toggle = !toggle'> Hidden Mangas </button>
+    <div v-show='toggle'>
+      <div class="row" v-for="manga in hiddenMangas" :key="manga.id">
+        <div class="star"> * </div>
+        <div class="url">{{ manga.url }}</div>
+        <div class="spacer"></div>
+        <div class="pageNum">
+          <input type="number" min="0" :value="manga.pageNum" >
+        </div>
+        <div class="checkbox-wrapper">
+          <input type="checkbox" v-on:click="hideManga(manga, $event)">
+        </div>
       </div>
     </div>
 

@@ -1,6 +1,6 @@
 // 3p
 import { createConnection } from 'typeorm';
-import { Mangas } from '../app/entities';
+import { Manga } from '../app/entities';
 
 export const schema = {
   additionalProperties: false,
@@ -17,12 +17,12 @@ export async function main(args: any) {
   const connection = await createConnection();
 
   try {
-    const mangas = new Mangas();
-    mangas.url = args.url;
-    mangas.pageNum = 0;
-    mangas.hidden = false;
+    const manga = new Manga();
+    manga.url = args.url;
+    manga.pageNum = 0;
+    manga.hidden = false;
 
-    console.log(await mangas.save());
+    console.log(await manga.save());
   } catch (error) {
     console.error(error);
   } finally {

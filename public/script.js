@@ -15,15 +15,16 @@ function request(url, method, body) {
       });
     }
 
-    return response.json().catch(() => {});
+    return response.json().catch(() => { });
   });
 }
 
 const app = new Vue({
   el: '#app',
   data: {
+    toggle: false,
     newMangaText: '',
-    mangas: [
+    listOfManga: [
       // {
       //   id: 1,
       //   text: 'Donald Duck'
@@ -31,25 +32,49 @@ const app = new Vue({
     ],
     error: null
   },
+  computed: {
+    notHiddenMangas: function () {
+      return this.listOfManga.filter(manga => manga.hidden === false)
+    },
+    hiddenMangas: function () {
+      return this.listOfManga.filter(manga => manga.hidden === true)
+    },
+  },
   methods: {
     addNewManga: function () {
       if (!this.newMangaText) { return; }
 
       this.error = null;
-      request('/api/mangas', 'POST', { text: this.newMangaText })
-        .then(manga => this.mangas.push(manga))
+      request('/api/manga', 'POST', { url: this.newMangaText })
+        // .then(manga => this.listOfManga.push(manga))
+        .then(manga => {
+          console.log(manga);
+          this.listOfManga.push(manga);
+        })
         .catch(error => this.error = error);
 
       this.newMangaText = '';
     },
+    // deleteManga: function (manga, event) {
+    //   if (event) event.preventDefault()
+    //   this.error = null;
+    //   request('/api/mangas/' + manga.id, 'DELETE')
+    //     .then(() => {
+    //       const index = this.listOfManga.indexOf(manga);
+    //       this.listOfManga.splice(index, 1);
+    //     })
+    //     .catch(error => {
+    //       this.error = error;
+    //     });
+    // },
     hideManga: function (manga, event) {
       if (event) event.preventDefault()
 
       this.error = null;
-      request('/api/mangas/' + manga.id, 'DELETE')
+      request('/api/manga/hide/' + manga.id, 'POST')
         .then(() => {
-          const index = this.mangas.indexOf(manga);
-          this.mangas.splice(index, 1);
+          const index = this.listOfManga.indexOf(manga);
+          this.listOfManga[index].hidden = !this.listOfManga[index].hidden
         })
         .catch(error => {
           this.error = error;
@@ -60,5 +85,5 @@ const app = new Vue({
 
 app.error = null;
 request('/api/mangas', 'GET')
-  .then(mangas => app.mangas = mangas)
+  .then(listOfManga => app.listOfManga = listOfManga)
   .catch(error => app.error = error);
