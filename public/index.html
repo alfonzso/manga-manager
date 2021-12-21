@@ -15,7 +15,7 @@
     <div class="box">
       <h1>Manga Manager</h1>
       <div class="row" v-for="manga in notHiddenMangas" :key="manga.id">
-        <div class="star"> * </div>
+        <div class="star"> <a :href="manga.url.replace('%%N%%',manga.pageNum)" target="_blank"> * </a> </a></div>
         <div class="url">{{ manga.url }}</div>
         <div class="spacer"></div>
         <div class="pageNum">
