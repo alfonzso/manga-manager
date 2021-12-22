@@ -1,10 +1,13 @@
 name: Docker Image CI
 
 on:
-  push:
-    branches: [ master ]
-  pull_request:
-    branches: [ master ]
+  # push:
+  #   branches: [ master ]
+  # pull_request:
+  #   branches: [ master ]
+  release:
+    types: # This configuration does not affect the page_build event above
+      - published
 
 jobs:
 
@@ -33,6 +36,6 @@ jobs:
       with:
         context: .
         push: true
-        tags: alfonzso/manga-manager:0.0.${{ github.run_number }}
+        tags: alfonzso/manga-manager:release-0.0.${{ github.run_number }}
         cache-from: type=registry,ref=alfonzso/manga-manager:buildcache
         cache-to: type=registry,ref=alfonzso/manga-manager:buildcache,mode=max
