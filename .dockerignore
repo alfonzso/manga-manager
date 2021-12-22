@@ -4,3 +4,6 @@ node_modules
 docker
 Dockerfile
 .dockerignore
+.gitignore
+.github
+db.sqlite.*
