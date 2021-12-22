@@ -1,0 +1,11 @@
+version: '3.3'
+services:
+  man-man:
+    ports:
+      - '3001:3001'
+    image: faf
+    volumes:
+        - './db.sqlite3:/opt/manga_manager/db.sqlite3'
+        - './db.sqlite3-shm:/opt/manga_manager/db.sqlite3-shm'
+        - './db.sqlite3-wal:/opt/manga_manager/db.sqlite3-wal'
+        # - './db.sqlite3:/opt/manga_manager/db.sqlite3'
