@@ -14,7 +14,7 @@ body {
 
 .box {
   padding: 30px;
-  width: fit-content;
+  /* width: fit-content; */
   min-width: 500px;
   letter-spacing: 1px;
   color: rgba(74,74,74,.9);
@@ -55,8 +55,23 @@ body {
   margin-left: auto;
 }
 
-.row {
-  /* color: black; */
+.adminBox {
+  padding: 30px;
+  width: 1000px;
+  letter-spacing: 1px;
+  color: rgba(74,74,74,.9);
+  background-color: #fff;
+  box-shadow: 0 12px 44px 0 rgba(0,0,0,.06);
+}
+
+.adminRow {
+  display: flex;
+  flex-flow: row ;
+  list-style: none;
+  justify-content: space-between;
+}
+
+.row{
   display: flex;
   flex-flow: row ;
 
@@ -65,28 +80,6 @@ body {
   list-style: none;
   justify-content: space-between;
 }
-/* .rowLeft {
-  display: flex;
-  flex-flow: nowrap;
-
-  justify-content: left;
-
-  padding: 0;
-  margin: 0;
-  list-style: none;
-}
-
-.rowRight {
-  display: flex;
-  flex-flow: nowrap;
-
-  justify-content: right;
-
-  padding: 0;
-  margin: 0;
-  list-style: none;
-} */
-
 
 .row:hover {
   background-color: lightgray;
@@ -96,19 +89,21 @@ body {
   flex-grow: 1;
 }
 
-.checkbox-wrapper {
-  /* margin-left: 20px; */
-  /* display: flex; */
-  /* flex-direction: column; */
-  /* justify-content: center; */
-}
-
 .row:last-of-type {
   border-bottom: none;
 }
 
 .row:last-of-type:hover {
   background-color: initial;
+}
+
+.adminUrl {
+  flex-grow: 1;
+}
+
+.adminOrder {
+  /* flex-grow: 1; */
+  width: 5%;
 }
 
 .submitForm {

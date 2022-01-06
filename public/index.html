@@ -27,9 +27,9 @@
   <div id="app">
     <div class="box">
       <h1>Manga Manager</h1>
-      <div class="row" v-for="manga in notHiddenMangas" :key="manga.id">
+      <div class="row" v-for="manga in orderedNotHiddenMangas" :key="manga.id">
         <div class="star"> <a :href="manga.url.replace('%%N%%',manga.pageNum)" target="_blank"> * </a> </a></div>
-        <div class="url">{{ manga.url }}</div>
+        <div class="url">{{ manga.name }}</div>
         <div class="spacer"></div>
         <div class="pageNum">
           <input type="number" min="0" @change="modifyMangaPageNumber(manga, $event)" v-model="manga.pageNum">
@@ -45,11 +45,11 @@
       </form>
     </div>
 
-    <button @click='toggle = !toggle'> Hidden Mangas </button>
-    <div v-show='toggle'>
+    <button @click='hiddenToggle = !hiddenToggle'> Hidden Mangas </button>
+    <div v-show='hiddenToggle'>
       <div class="row" v-for="manga in hiddenMangas" :key="manga.id">
         <div class="star"> * </div>
-        <div class="url">{{ manga.url }}</div>
+        <div class="url">{{ manga.name }}</div>
         <div class="spacer"></div>
         <div class="pageNum">
           <input type="number" min="0" :value="manga.pageNum">
@@ -58,6 +58,17 @@
           <input type="checkbox" v-on:click="hideManga(manga, $event)">
         </div>
       </div>
+    </div>
+
+    <button @click='adminToggle = !adminToggle'> Admin </button>
+    <div class="adminBox" v-show='adminToggle'>
+      <form class="adminRow" ref="form" v-for="(manga, index) in orderedMangas" :key="manga.id"
+        @submit="updateManga(manga,event)" method="post">
+        <input class="adminText" type="text" v-model="manga.name">
+        <input class="adminUrl" type="text" v-model="manga.url">
+        <input class="adminOrder" type="number" min="0" v-model="manga.order">
+        <input type="submit" value="Submit">
+      </form>
     </div>
 
     <div class="box error-box" v-if="error">

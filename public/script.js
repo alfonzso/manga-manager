@@ -24,7 +24,8 @@ const app = new Vue({
   data: {
     timer: null,
     listOfTimer: [],
-    toggle: false,
+    hiddenToggle: false,
+    adminToggle: false,
     newMangaText: '',
     listOfManga: [
       // {
@@ -36,6 +37,10 @@ const app = new Vue({
     errors: [],
     mangaName: null,
     mangaUrl: null,
+    updateMangaName: null,
+    updateMangaUrl: null,
+    updateMangaOrder: null,
+    testObject: {},
   },
   computed: {
     notHiddenMangas: function () {
@@ -43,6 +48,21 @@ const app = new Vue({
     },
     hiddenMangas: function () {
       return this.listOfManga.filter(manga => manga.hidden === true)
+    },
+    orderedNotHiddenMangas: function () {
+      return this.notHiddenMangas.sort((a, b) => {
+        return a.order - b.order;
+      });
+    },
+    orderedHiddenMangas: function () {
+      return this.hiddenMangas.sort((a, b) => {
+        return a.order - b.order;
+      });
+    },
+    orderedMangas: function () {
+      return this.listOfManga.sort((a, b) => {
+        return a.order - b.order;
+      });
     },
   },
   methods: {
@@ -64,27 +84,8 @@ const app = new Vue({
 
       // this.mangaPageNumber = -1;
     },
-    // addNewManga: function () {
-    //   if (!this.newMangaText) { return; }
-
-    //   this.error = null;
-    //   request('/api/manga', 'POST', { url: this.newMangaText })
-    //     // .then(manga => this.listOfManga.push(manga))
-    //     .then(manga => {
-    //       console.log(manga);
-    //       this.listOfManga.push(manga);
-    //     })
-    //     .catch(error => this.error = error);
-
-    //   this.newMangaText = '';
-    // },
     addNewManga: function (e) {
       e.preventDefault();
-      console.log('addNewManga ...')
-      // if (this.mangaName && this.mangaUrl) {
-      //   return true;
-      // }
-
       this.errors = [];
 
       if (!this.mangaName) {
@@ -96,26 +97,49 @@ const app = new Vue({
 
       request('/api/manga', 'POST', { name: this.mangaName, url: this.mangaUrl })
         .then(manga => this.listOfManga.push(manga))
-        // .then(manga => {
-        //   console.log(manga);
-        //   this.listOfManga.push(manga);
-        // })
         .catch(error => this.error = error);
 
-
     },
-    // deleteManga: function (manga, event) {
-    //   if (event) event.preventDefault()
-    //   this.error = null;
-    //   request('/api/mangas/' + manga.id, 'DELETE')
-    //     .then(() => {
-    //       const index = this.listOfManga.indexOf(manga);
-    //       this.listOfManga.splice(index, 1);
-    //     })
-    //     .catch(error => {
-    //       this.error = error;
-    //     });
-    // },
+    updateManga: function (manga, e) {
+      e.preventDefault();
+
+      // console.log(
+      // manga
+      // this.$refs.form.admin_text
+      // this.updateMangaName,
+      // this.updateMangaUrl,
+      // this.updateMangaOrder,
+      // )
+      this.errors = [];
+
+      if (!manga.name) {
+        this.errors.push('Manga name required.');
+      }
+      if (!manga.url) {
+        this.errors.push('Manga url required.');
+      }
+      if (!manga.order) {
+        this.errors.push('Manga order required.');
+      }
+      console.log(
+        manga.name,
+        manga.url,
+        manga.order,
+      )
+      // request('/api/manga', 'POST', { name: this.mangaName, url: this.mangaUrl })
+      //   .then(manga => this.listOfManga.push(manga))
+      //   .catch(error => this.error = error);
+      request('/api/manga/admin/edit/' + manga.id, 'PATCH', {
+        // pageNum: manga.pageNum
+        name: manga.name,
+        url: manga.url,
+        order: manga.order,
+      })
+        .then(manga => {
+          console.log(manga);
+        })
+        .catch(error => this.error = error);
+    },
     hideManga: function (manga, event) {
       if (event) event.preventDefault()
 
