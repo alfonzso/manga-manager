@@ -11,6 +11,19 @@
 </head>
 
 <body>
+
+  <a href="#" onclick="yourlink()">Open all mangas</a>
+  <script>
+
+    function yourlink() {
+      [...document.querySelectorAll('.star > a')].forEach(
+        (element, index, array) => {
+          window.open(element.href)
+        }
+      );
+    };
+  </script>
+
   <div id="app">
     <div class="box">
       <h1>Manga Manager</h1>
@@ -25,10 +38,11 @@
           <input type="checkbox" v-on:click="hideManga(manga, $event)">
         </div>
       </div>
-      <div class="row">
-        <input type="text" class="text-input" v-on:keyup.enter="addNewManga" v-model="newMangaText"
-          placeholder="Type a new manga and press Enter">
-      </div>
+      <form class="row submitForm" @submit="addNewManga" method="post">
+        <input class="mangaName" v-model="mangaName" type="text" name="mangaName" placeholder="Type a new manga name">
+        <input class="mangaUrl" v-model="mangaUrl" type="text" name="mangaUrl" placeholder="Type a new manga url">
+        <input type="submit" value="Submit">
+      </form>
     </div>
 
     <button @click='toggle = !toggle'> Hidden Mangas </button>
@@ -47,6 +61,12 @@
     </div>
 
     <div class="box error-box" v-if="error">
+      <p v-if="errors.length">
+        <b>Please correct the following error(s):</b>
+      <ul>
+        <li v-for="error in errors">{{ error }}</li>
+      </ul>
+      </p>
       <div class="error-header">Error {{ error.status }}: {{ error.statusText }}</div>
       <div class="error-body">
         <strong>Request:</strong>
@@ -58,7 +78,6 @@
     </div>
   </div>
 
-  <!-- <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script> -->
   <script src="https://vuejs.org/js/vue.min.js"></script>
   <script src="script.js"></script>
 </body>

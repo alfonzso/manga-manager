@@ -7,6 +7,13 @@ export class Manga extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
+  @Column({
+    type: String,
+    // unique: true,
+    nullable: true,
+  })
+  name: string | null;
+
   @Column()
   url: string;
 
@@ -15,5 +22,12 @@ export class Manga extends BaseEntity {
 
   @Column()
   hidden: boolean;
+
+  @Column({
+    type: Number,
+    // unique: true,
+    nullable: true,
+  })
+  order: number;
 
 }

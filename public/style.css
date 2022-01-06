@@ -111,8 +111,16 @@ body {
   background-color: initial;
 }
 
-.text-input {
-  flex-grow: 1;
-  padding: 10px;
+.submitForm {
+  height: 35px;
+  margin-top: 10px;
+}
+
+.mangaName {
+  width: 25%;
+}
+
+.mangaUrl {
+  width: 75%;
 }
 

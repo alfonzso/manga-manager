@@ -38,9 +38,11 @@ export class ApiController {
   async postMangas(ctx: Context) {
     // Create a new mangas with the body of the HTTP request.
     const manga = new Manga();
+    manga.name = ctx.request.body.name;
     manga.url = ctx.request.body.url;
     manga.pageNum = 0;
     manga.hidden = false;
+    manga.order = 0;
 
     // Save the mangas in the database.
     await manga.save();

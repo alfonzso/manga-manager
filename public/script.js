@@ -32,7 +32,10 @@ const app = new Vue({
       //   text: 'Donald Duck'
       // }
     ],
-    error: null
+    error: null,
+    errors: [],
+    mangaName: null,
+    mangaUrl: null,
   },
   computed: {
     notHiddenMangas: function () {
@@ -49,31 +52,57 @@ const app = new Vue({
       clearTimeout(this.listOfTimer[manga.id])
 
       this.listOfTimer[manga.id] = setTimeout(() => {
-          this.error = null;
-          request('/api/manga/page/' + manga.id, 'PATCH', {
-            pageNum: manga.pageNum
+        this.error = null;
+        request('/api/manga/page/' + manga.id, 'PATCH', {
+          pageNum: manga.pageNum
+        })
+          .then(manga => {
+            console.log(manga);
           })
-            .then(manga => {
-              console.log(manga);
-            })
-            .catch(error => this.error = error);
+          .catch(error => this.error = error);
       }, 2500)
 
       // this.mangaPageNumber = -1;
     },
-    addNewManga: function () {
-      if (!this.newMangaText) { return; }
+    // addNewManga: function () {
+    //   if (!this.newMangaText) { return; }
 
-      this.error = null;
-      request('/api/manga', 'POST', { url: this.newMangaText })
-        // .then(manga => this.listOfManga.push(manga))
-        .then(manga => {
-          console.log(manga);
-          this.listOfManga.push(manga);
-        })
+    //   this.error = null;
+    //   request('/api/manga', 'POST', { url: this.newMangaText })
+    //     // .then(manga => this.listOfManga.push(manga))
+    //     .then(manga => {
+    //       console.log(manga);
+    //       this.listOfManga.push(manga);
+    //     })
+    //     .catch(error => this.error = error);
+
+    //   this.newMangaText = '';
+    // },
+    addNewManga: function (e) {
+      e.preventDefault();
+      console.log('addNewManga ...')
+      // if (this.mangaName && this.mangaUrl) {
+      //   return true;
+      // }
+
+      this.errors = [];
+
+      if (!this.mangaName) {
+        this.errors.push('Manga name required.');
+      }
+      if (!this.mangaUrl) {
+        this.errors.push('Manga url required.');
+      }
+
+      request('/api/manga', 'POST', { name: this.mangaName, url: this.mangaUrl })
+        .then(manga => this.listOfManga.push(manga))
+        // .then(manga => {
+        //   console.log(manga);
+        //   this.listOfManga.push(manga);
+        // })
         .catch(error => this.error = error);
 
-      this.newMangaText = '';
+
     },
     // deleteManga: function (manga, event) {
     //   if (event) event.preventDefault()

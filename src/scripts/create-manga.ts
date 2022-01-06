@@ -6,10 +6,12 @@ export const schema = {
   additionalProperties: false,
   properties: {
     url: { type: 'string' },
+    name: { type: 'string' },
     pageNum: { type: 'number' },
-    hidden: { type: 'boolean' }
+    hidden: { type: 'boolean' },
+    order: { type: 'number' },
   },
-  required: ['url'],
+  required: ['url', 'name'],
   type: 'object',
 };
 
@@ -18,9 +20,11 @@ export async function main(args: any) {
 
   try {
     const manga = new Manga();
+    manga.name = args.name;
     manga.url = args.url;
     manga.pageNum = 0;
     manga.hidden = false;
+    manga.order = 0;
 
     console.log(await manga.save());
   } catch (error) {
