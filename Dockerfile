@@ -7,15 +7,15 @@ WORKDIR /tmp/manga_manager/
 # RUN cd /tmp/manga_manager/ && npm install --production
 
 COPY . /tmp/manga_manager/
-RUN curl -sfL https://install.goreleaser.com/github.com/tj/node-prune.sh | sh -s -- -b /usr/local/bin
+COPY docker/node-prune.sh /usr/local/bin/node-prune.sh
+# RUN curl -sfL https://install.goreleaser.com/github.com/tj/node-prune.sh | sh -s -- -b /usr/local/bin
 RUN npm ci && npm run build
 
 # remove development dependencies
 RUN npm prune --production
 
 # run node prune
-RUN /usr/local/bin/node-prune
-
+RUN /usr/local/bin/node-prune.sh
 
 # FROM node:12-alpine
 FROM node:17.3.0-alpine3.13
