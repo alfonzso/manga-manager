@@ -7,4 +7,3 @@ Dockerfile
 .gitignore
 .github
 db.sqlite.*
-!docker/node-prune.sh
