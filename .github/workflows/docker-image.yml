@@ -1,6 +1,10 @@
 name: Docker Image CI
 
 on:
+  workflow_dispatch:
+    inputs:
+      msg:
+        default: "Manual push ?!"
   # push:
   #   branches: [ master ]
   # pull_request:
