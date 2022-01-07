@@ -23,7 +23,8 @@ const app = new Vue({
   el: '#app',
   data: {
     timer: null,
-    listOfTimer: [],
+    pageNumTimer: [],
+    adminTimer: [],
     hiddenToggle: false,
     adminToggle: false,
     newMangaText: '',
@@ -69,9 +70,9 @@ const app = new Vue({
     modifyMangaPageNumber: function (manga, event) {
       if (event) event.preventDefault()
 
-      clearTimeout(this.listOfTimer[manga.id])
+      clearTimeout(this.pageNumTimer[manga.id])
 
-      this.listOfTimer[manga.id] = setTimeout(() => {
+      this.pageNumTimer[manga.id] = setTimeout(() => {
         this.error = null;
         request('/api/manga/page/' + manga.id, 'PATCH', {
           pageNum: manga.pageNum
@@ -101,17 +102,10 @@ const app = new Vue({
 
     },
     updateManga: function (manga, e) {
-      e.preventDefault();
+      if (e) e.preventDefault();
+      clearTimeout(this.adminTimer[manga.id])
 
-      // console.log(
-      // manga
-      // this.$refs.form.admin_text
-      // this.updateMangaName,
-      // this.updateMangaUrl,
-      // this.updateMangaOrder,
-      // )
       this.errors = [];
-
       if (!manga.name) {
         this.errors.push('Manga name required.');
       }
@@ -121,24 +115,20 @@ const app = new Vue({
       if (!manga.order) {
         this.errors.push('Manga order required.');
       }
-      console.log(
-        manga.name,
-        manga.url,
-        manga.order,
-      )
-      // request('/api/manga', 'POST', { name: this.mangaName, url: this.mangaUrl })
-      //   .then(manga => this.listOfManga.push(manga))
-      //   .catch(error => this.error = error);
-      request('/api/manga/admin/edit/' + manga.id, 'PATCH', {
-        // pageNum: manga.pageNum
-        name: manga.name,
-        url: manga.url,
-        order: manga.order,
-      })
-        .then(manga => {
-          console.log(manga);
+
+      this.adminTimer[manga.id] = setTimeout(() => {
+        this.error = null;
+        request('/api/manga/admin/edit/' + manga.id, 'PATCH', {
+          name: manga.name,
+          url: manga.url,
+          order: manga.order,
         })
-        .catch(error => this.error = error);
+          .then(manga => {
+            console.log(manga);
+          })
+          .catch(error => this.error = error);
+      }, 2500)
+
     },
     hideManga: function (manga, event) {
       if (event) event.preventDefault()
@@ -152,9 +142,27 @@ const app = new Vue({
         .catch(error => {
           this.error = error;
         });
-    }
+    },
+    deleteManga: function (manga, event) {
+      if (event) event.preventDefault()
+
+      this.error = null;
+      if (confirm("Do you really want to delete?")) {
+        request('/api/manga/delete/' + manga.id, 'DELETE')
+          .then(() => {
+            this.listOfManga.splice(this.listOfManga.indexOf(manga), 1);
+          })
+          .catch(error => {
+            this.error = error;
+          });
+      }
+    },
   }
 });
+
+console.log(
+  `fafa ${app.error}`
+)
 
 app.error = null;
 request('/api/mangas', 'GET')

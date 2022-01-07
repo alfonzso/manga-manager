@@ -39,8 +39,8 @@
         </div>
       </div>
       <form class="row submitForm" @submit="addNewManga" method="post">
-        <input class="mangaName" v-model="mangaName" type="text" name="mangaName" placeholder="Type a new manga name">
-        <input class="mangaUrl" v-model="mangaUrl" type="text" name="mangaUrl" placeholder="Type a new manga url">
+        <input class="mangaName" v-model="mangaName" type="text" name="mangaName" placeholder="Type a manga name">
+        <input class="mangaUrl" v-model="mangaUrl" type="text" name="mangaUrl" placeholder="Type a manga url">
         <input type="submit" value="Submit">
       </form>
     </div>
@@ -63,11 +63,11 @@
     <button @click='adminToggle = !adminToggle'> Admin </button>
     <div class="adminBox" v-show='adminToggle'>
       <form class="adminRow" ref="form" v-for="(manga, index) in orderedMangas" :key="manga.id"
-        @submit="updateManga(manga,event)" method="post">
+        @change="updateManga(manga,event)" method="post">
         <input class="adminText" type="text" v-model="manga.name">
         <input class="adminUrl" type="text" v-model="manga.url">
         <input class="adminOrder" type="number" min="0" v-model="manga.order">
-        <input type="submit" value="Submit">
+        <input type="submit" v-on:click="deleteManga(manga, $event)" value="X">
       </form>
     </div>
 

@@ -91,21 +91,21 @@ export class ApiController {
     return new HttpResponseNoContent();
   }
 
-  // @Delete('/mangas/:id')
-  // async deleteManga(ctx: Context) {
-  //   // Get the manga with the id given in the URL if it exists.
-  //   const manga = await Mangas.findOne({ id: ctx.request.params.id });
+  @Delete('/manga/delete/:id')
+  async deleteManga(ctx: Context) {
+    // Get the manga with the id given in the URL if it exists.
+    const manga = await Manga.findOne({ id: ctx.request.params.id });
 
-  //   // Return a 404 Not Found response if no such manga exists.
-  //   if (!manga) {
-  //     return new HttpResponseNotFound();
-  //   }
+    // Return a 404 Not Found response if no such manga exists.
+    if (!manga) {
+      return new HttpResponseNotFound();
+    }
 
-  //   // Remove the manga from the database.
-  //   await manga.remove();
+    // Remove the manga from the database.
+    await manga.remove();
 
-  //   // Returns an successful empty response. The status is 204.
-  //   return new HttpResponseNoContent();
-  // }
+    // Returns an successful empty response. The status is 204.
+    return new HttpResponseNoContent();
+  }
 
 }
