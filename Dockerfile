@@ -7,7 +7,6 @@ RUN npm ci && npm run build
 
 # remove development dependencies
 RUN npm prune --production
-RUN npm install modclean -g && modclean -r
 
 FROM node:17.3.0-alpine3.13
 WORKDIR /opt/manga_manager

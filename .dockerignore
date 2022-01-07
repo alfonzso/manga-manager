@@ -1,9 +1,9 @@
-.git
-build
-node_modules
-docker
-Dockerfile
-.dockerignore
-.gitignore
-.github
-db.sqlite.*
+# Ignore everything
+**
+# Allow files/folders
+!config
+!public
+!src
+!tsconfig*.json
+!ormconfig.js
+!package*.json

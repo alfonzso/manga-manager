@@ -1,9 +1,11 @@
-name: Docker Image CI
+name: ManMan docker build
 
 on:
   workflow_dispatch:
     inputs:
       msg:
+        required: false
+        description: "Test"
         default: "Manual push ?!"
   # push:
   #   branches: [ master ]
@@ -45,7 +47,7 @@ jobs:
       with:
         context: .
         push: true
-        platforms: linux/amd64,linux/arm64,linux/arm/v7,linux/arm/v6
+        # platforms: linux/amd64,linux/arm64,linux/arm/v7,linux/arm/v6
         tags: alfonzso/manga-manager:release-0.0.${{ github.run_number }}
         cache-from: type=registry,ref=alfonzso/manga-manager:buildcache
         cache-to: type=registry,ref=alfonzso/manga-manager:buildcache,mode=max

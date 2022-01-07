@@ -1,0 +1,1 @@
+docker network create manmannet --subnet 172.24.24.0/24
