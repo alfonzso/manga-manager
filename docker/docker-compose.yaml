@@ -3,7 +3,7 @@ services:
   man-man:
     ports:
       - '3001:3001'
-    image: alfonzso/manga-manager:0.0.2
+    image: alfonzso/manga-manager:release-0.0.4
     volumes:
       - './db.sqlite3:/opt/manga_manager/db.sqlite3'
       - './db.sqlite3-shm:/opt/manga_manager/db.sqlite3-shm'
