@@ -11,3 +11,5 @@ build/
 *.sqlite3-wal
 .vscode/
 .idea/
+*.tar.gz
+datas

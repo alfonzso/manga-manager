@@ -1,0 +1,20 @@
+version: "3.3"
+
+services:
+  db:
+    image: postgres
+    environment:
+      - "POSTGRES_DB=mangamanager"
+      - "POSTGRES_USER=manman"
+      - "POSTGRES_PASSWORD=man-man-pwd"
+    volumes:
+      - ./data/db:/var/lib/postgresql/data
+    networks:
+      - postgre
+    ports:
+      - 5432:5432
+
+networks:
+  postgre:
+    external: true
+
