@@ -1,11 +1,26 @@
-import { Context, Get, Post, Delete, HttpResponseOK, HttpResponseCreated, HttpResponseNotFound, HttpResponseNoContent, Patch } from '@foal/core';
-import { Manga } from '../entities';
+import { Context, Get, Post, Delete, HttpResponseOK, HttpResponseCreated, HttpResponseNotFound, HttpResponseNoContent, Patch, UserRequired, verifyPassword, Store, createSession } from '@foal/core';
+import { dependency, UseSessions, ValidateBody, HttpResponseUnauthorized } from '@foal/core';
+import { fetchUser } from '@foal/typeorm';
+import { hashPassword, Session, } from '@foal/core';
+import { User, Manga } from '../entities';
 
+@UserRequired()
 export class ApiController {
+
+  // @dependency
+  // store: Store;
 
   // @Get('/')
   // index(ctx: Context) {
   //   return new HttpResponseOK('Hello world!');
+  // }
+
+  // @Get('/tst')
+  // @Post('/tst')
+  // async tst(ctx: Context) {
+  //   // const listOfManga = await Manga.find();
+  //   console.log(ctx.user)
+  //   return new HttpResponseOK();
   // }
 
   @Get('/mangas')
@@ -107,5 +122,6 @@ export class ApiController {
     // Returns an successful empty response. The status is 204.
     return new HttpResponseNoContent();
   }
+
 
 }

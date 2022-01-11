@@ -22,7 +22,6 @@ function request(url, method, body) {
 const app = new Vue({
   el: '#app',
   data: {
-    timer: null,
     pageNumTimer: [],
     adminTimer: [],
     hiddenToggle: false,
@@ -157,14 +156,88 @@ const app = new Vue({
           });
       }
     },
+
   }
 });
 
-console.log(
-  `fafa ${app.error}`
-)
+
+const auth = new Vue({
+  el: '#auth',
+  data: {
+    // counter: 0,
+    errors: [],
+    isUserLoggedIn: false,
+    email: null,
+    password: null,
+  },
+  methods: {
+    login: function (event) {
+      if (event) event.preventDefault()
+      // request('/auth/login', 'POST')
+      //   .then(() => {
+      //     this.isUserLoggedIn = true
+      //   })
+      //   .catch(error => {
+      //     this.error = error;
+      //   });
+
+      if (!this.email) {
+        this.errors.push('email required.');
+      }
+      if (!this.password) {
+        this.errors.push('password required.');
+      }
+
+      request('/auth/login', 'POST',
+        { email: this.email, password: this.password })
+        .then(() => {
+          // this.isUserLoggedIn = true;
+          location.reload();
+        })
+        .catch(error => this.error = error);
+    },
+    logout: function (event) {
+      if (event) event.preventDefault()
+      request('/auth/logout', 'POST')
+        .then(() => {
+          // this.isUserLoggedIn = false
+          location.reload();
+        })
+        .catch(error => {
+          this.error = error;
+        });
+    },
+    // tst: function (event) {
+    //   console.log("FFFFFFFFFFFFF")
+    //   if (event) event.preventDefault()
+    //   request('/api/tst', 'POST')
+    //     .catch(error => {
+    //       this.error = error;
+    //     });
+    // },
+  }
+})
 
 app.error = null;
+// function getMangas() {
+//   console.log("1")
+//   request('/api/mangas', 'GET')
+//     .then(listOfManga => app.listOfManga = listOfManga)
+//     .catch(error => app.error = error);
+//   console.log("2")
+//   console.log(app.listOfManga)
+// }
+// getMangas()
 request('/api/mangas', 'GET')
-  .then(listOfManga => app.listOfManga = listOfManga)
-  .catch(error => app.error = error);
+  // .then(listOfManga => app.listOfManga = listOfManga)
+  .then((listOfManga) => {
+    app.listOfManga = listOfManga
+    auth.isUserLoggedIn = true
+    // this.isUserLoggedIn = false
+    // location.reload();
+  })
+  // .catch(error => app.error = error);
+  .catch((error) => {
+    app.error = error
+    auth.isUserLoggedIn = false
+  });

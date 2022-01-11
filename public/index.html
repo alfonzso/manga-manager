@@ -24,6 +24,23 @@
     };
   </script>
 
+  <div id="auth">
+    <form @submit="login" method="post" v-if="!isUserLoggedIn" >
+      <input v-model="email" type="email" name="email" id="email">
+      <input v-model="password" type="password" name="password" id="password">
+      <input type="submit" value="Log In">
+    </form>
+    <button type="submit" class="btn btn-success" @click="logout($event)" v-if="isUserLoggedIn" >LogOut</button>
+    <div class="box error-box" v-if="errors.length">
+      <p >
+        <b>Please correct the following error(s):</b>
+      <ul>
+        <li v-for="error in errors">{{ error }}</li>
+      </ul>
+      </p>
+    </div>
+  </div>
+
   <div id="app">
     <div class="box">
       <h1>Manga Manager</h1>

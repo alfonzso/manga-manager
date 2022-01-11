@@ -25,6 +25,7 @@
   },
   "dependencies": {
     "@foal/core": "^2.0.0",
+    "@foal/password": "^2.7.1",
     "@foal/typeorm": "^2.0.0",
     "pg": "^8.7.1",
     "source-map-support": "~0.5.19",
@@ -32,11 +33,11 @@
   },
   "devDependencies": {
     "@foal/cli": "*",
-    "colors": "1.4.0",
     "@types/mocha": "7.0.2",
     "@types/node": "10.17.24",
     "@typescript-eslint/eslint-plugin": "^5.9.0",
     "@typescript-eslint/parser": "^5.9.0",
+    "colors": "1.4.0",
     "concurrently": "^7.0.0",
     "eslint": "^8.6.0",
     "mocha": "^8.4.0",
