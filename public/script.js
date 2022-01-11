@@ -173,13 +173,8 @@ const auth = new Vue({
   methods: {
     login: function (event) {
       if (event) event.preventDefault()
-      // request('/auth/login', 'POST')
-      //   .then(() => {
-      //     this.isUserLoggedIn = true
-      //   })
-      //   .catch(error => {
-      //     this.error = error;
-      //   });
+
+      this.errors = []
 
       if (!this.email) {
         this.errors.push('email required.');
@@ -191,7 +186,6 @@ const auth = new Vue({
       request('/auth/login', 'POST',
         { email: this.email, password: this.password })
         .then(() => {
-          // this.isUserLoggedIn = true;
           location.reload();
         })
         .catch(error => this.error = error);
@@ -200,43 +194,21 @@ const auth = new Vue({
       if (event) event.preventDefault()
       request('/auth/logout', 'POST')
         .then(() => {
-          // this.isUserLoggedIn = false
           location.reload();
         })
         .catch(error => {
           this.error = error;
         });
     },
-    // tst: function (event) {
-    //   console.log("FFFFFFFFFFFFF")
-    //   if (event) event.preventDefault()
-    //   request('/api/tst', 'POST')
-    //     .catch(error => {
-    //       this.error = error;
-    //     });
-    // },
   }
 })
 
 app.error = null;
-// function getMangas() {
-//   console.log("1")
-//   request('/api/mangas', 'GET')
-//     .then(listOfManga => app.listOfManga = listOfManga)
-//     .catch(error => app.error = error);
-//   console.log("2")
-//   console.log(app.listOfManga)
-// }
-// getMangas()
 request('/api/mangas', 'GET')
-  // .then(listOfManga => app.listOfManga = listOfManga)
   .then((listOfManga) => {
     app.listOfManga = listOfManga
     auth.isUserLoggedIn = true
-    // this.isUserLoggedIn = false
-    // location.reload();
   })
-  // .catch(error => app.error = error);
   .catch((error) => {
     app.error = error
     auth.isUserLoggedIn = false
