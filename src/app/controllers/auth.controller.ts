@@ -68,26 +68,11 @@ export class AuthController {
     return new HttpResponseRedirect('/');
   }
 
-  // @Post('/logout')
-  @Get('/tst')
-  async test(ctx: Context<any, Session>) {
-    // await ctx.session.destroy();
-    // console.log(
-    //   ctx.session, ctx.
-    // )
-    // const foobar = Config.get('settings.session.expirationTimeouts', 'boolean', false);
+  @Get('/cleanUpExpiredSessions')
+  async cleanUpExpiredSessions(ctx: Context<any, Session>) {
     const expirationTimeouts: {absolute:number, inactivity: number} = Config.get('settings.session.expirationTimeouts', 'any', { absolute: 604800, inactivity: 900 });
-    // console.log(expirationTimeouts)
     this.store.cleanUpExpiredSessions(expirationTimeouts.inactivity, expirationTimeouts.absolute)
-    // this.store.cleanUpExpiredSessions(undefined,undefined)
-    // const store = createService(TypeORMStore);
-    // await store.cleanUpExpiredSessions();
-    // console.log(
-    //   this.store.
-    // )
-
     return new HttpResponseOK();
-    // return new HttpResponseRedirect('/');
   }
 }
 

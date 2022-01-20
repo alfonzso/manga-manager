@@ -5,8 +5,8 @@
     "session": {
       "store": "@foal/typeorm",
       "expirationTimeouts": {
-        "absolute": 604800,
-        "inactivity": 900
+        "absolute": 1209600,
+        "inactivity": 604800
       }
     }
   },

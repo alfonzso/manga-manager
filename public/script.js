@@ -212,5 +212,5 @@ request('/api/mangas', 'GET')
   .catch((error) => {
     app.error = error
     auth.isUserLoggedIn = false
-    // request('/auth/tst', 'POST')
+    request('/auth/cleanUpExpiredSessions', 'GET')
   });
