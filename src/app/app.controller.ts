@@ -7,6 +7,7 @@ import { ApiController, AuthController } from './controllers';
 
 @UseSessions({
   cookie: true,
+  create: false,
   user: fetchUser(User)
 })
 export class AppController implements IAppController {

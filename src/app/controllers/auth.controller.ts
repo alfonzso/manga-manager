@@ -1,4 +1,4 @@
-import { Context, Get, hashPassword, HttpResponseOK, HttpResponseRedirect, HttpResponseUnauthorized, Post, Session, ValidateBody, verifyPassword } from '@foal/core';
+import { Config, Context, createSession, dependency, Get, HttpResponseOK, HttpResponseRedirect, HttpResponseUnauthorized, Post, Session, Store, ValidateBody, verifyPassword } from '@foal/core';
 
 import { User } from '../entities';
 
@@ -8,11 +8,14 @@ const credentialsSchema = {
     email: { type: 'string', format: 'email' },
     password: { type: 'string' }
   },
-  required: [ 'email', 'password' ],
+  required: ['email', 'password'],
   type: 'object',
 };
 
 export class AuthController {
+  // This line is required.
+  @dependency
+  store: Store;
 
   // @Post('/signup')
   // @ValidateBody(credentialsSchema)
@@ -41,6 +44,13 @@ export class AuthController {
       return new HttpResponseUnauthorized();
     }
 
+    if (!ctx.session) {
+      console.log(ctx.session, this.store)
+      ctx.session = await createSession(this.store);
+      console.log(ctx.session, this.store)
+      // ctx.session.
+    }
+
     ctx.session.setUser(user);
     await ctx.session.regenerateID();
 
@@ -57,4 +67,27 @@ export class AuthController {
     // return new HttpResponseOK();
     return new HttpResponseRedirect('/');
   }
+
+  // @Post('/logout')
+  @Get('/tst')
+  async test(ctx: Context<any, Session>) {
+    // await ctx.session.destroy();
+    // console.log(
+    //   ctx.session, ctx.
+    // )
+    // const foobar = Config.get('settings.session.expirationTimeouts', 'boolean', false);
+    const expirationTimeouts: {absolute:number, inactivity: number} = Config.get('settings.session.expirationTimeouts', 'any', { absolute: 604800, inactivity: 900 });
+    // console.log(expirationTimeouts)
+    this.store.cleanUpExpiredSessions(expirationTimeouts.inactivity, expirationTimeouts.absolute)
+    // this.store.cleanUpExpiredSessions(undefined,undefined)
+    // const store = createService(TypeORMStore);
+    // await store.cleanUpExpiredSessions();
+    // console.log(
+    //   this.store.
+    // )
+
+    return new HttpResponseOK();
+    // return new HttpResponseRedirect('/');
+  }
 }
+
