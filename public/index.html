@@ -44,8 +44,8 @@
     <div class="box">
       <h1>Manga Manager</h1>
       <div class="row" v-for="manga in orderedNotHiddenMangas" :key="manga.id">
-        {{ testit("manga.url") }}
-        <div class="star"> <a :href="manga.url.replace('%%N%%', manga.pageNum)" target="_blank"> * </a> </a></div>
+        {{ testit(manga.nextUrl) }}
+        <div class="star"> <a :href="manga.editedUrl" target="_blank"> * </a> </a></div>
         <div class="url">{{ manga.name }}</div>
         <div class="spacer"></div>
         <div class="pageNum">
@@ -79,13 +79,19 @@
 
     <button @click='adminToggle = !adminToggle'> Admin </button>
     <div class="adminBox" v-show='adminToggle'>
-      <form class="adminRow" ref="form" v-for="(manga, index) in orderedMangas" :key="manga.id"
-        @change="updateManga(manga,event)" method="post">
+      <form
+        class="adminRow"
+        ref="form"
+        v-for="(manga, index) in orderedMangas"
+        :key="manga.id"
+        @change="updateManga(manga,event)" method="post"
+      >
         <input class="adminText" type="text" v-model="manga.name">
         <input class="adminUrl" type="text" v-model="manga.url">
         <input class="adminOrder" type="number" min="0" v-model="manga.order">
         <input type="submit" v-on:click="deleteManga(manga, $event)" value="X">
       </form>
+
     </div>
 
     <div class="box error-box" v-if="error">
@@ -107,7 +113,8 @@
   </div>
 
   <script src="https://vuejs.org/js/vue.min.js"></script>
-  <script src="script.js"></script>
+  <!-- <script data-main="script" src="require.js"></script> -->
+  <script type="module" src="script.js"></script>
 </body>
 
 </html>
