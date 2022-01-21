@@ -1,6 +1,7 @@
-function request(url, method, body) {
+function _request(url, method, body) {
   return fetch(url, {
     method,
+    // mode: 'no-cors',
     body: JSON.stringify(body),
     headers: {
       'Content-Type': 'application/json'
@@ -60,12 +61,18 @@ const app = new Vue({
       });
     },
     orderedMangas: function () {
-      return this.listOfManga.sort((a, b) => {
+      // have to use slice() method too, cuz sort will modify listOfManga object
+      // which is reactive because of Vue, so Vue will re-render the page twice ...
+      return this.listOfManga.slice().sort((a, b) => {
         return a.order - b.order;
       });
     },
   },
   methods: {
+    testit: function (txt) {
+      // e.preventDefault();
+      // console.log(txt)
+    },
     modifyMangaPageNumber: function (manga, event) {
       if (event) event.preventDefault()
 
@@ -73,7 +80,7 @@ const app = new Vue({
 
       this.pageNumTimer[manga.id] = setTimeout(() => {
         this.error = null;
-        request('/api/manga/page/' + manga.id, 'PATCH', {
+        _request('/api/manga/page/' + manga.id, 'PATCH', {
           pageNum: manga.pageNum
         })
           .then(manga => {
@@ -95,7 +102,7 @@ const app = new Vue({
         this.errors.push('Manga url required.');
       }
 
-      request('/api/manga', 'POST', { name: this.mangaName, url: this.mangaUrl })
+      _request('/api/manga', 'POST', { name: this.mangaName, url: this.mangaUrl })
         .then(manga => this.listOfManga.push(manga))
         .catch(error => this.error = error);
 
@@ -117,7 +124,7 @@ const app = new Vue({
 
       this.adminTimer[manga.id] = setTimeout(() => {
         this.error = null;
-        request('/api/manga/admin/edit/' + manga.id, 'PATCH', {
+        _request('/api/manga/admin/edit/' + manga.id, 'PATCH', {
           name: manga.name,
           url: manga.url,
           order: manga.order,
@@ -133,7 +140,7 @@ const app = new Vue({
       if (event) event.preventDefault()
 
       this.error = null;
-      request('/api/manga/hide/' + manga.id, 'POST')
+      _request('/api/manga/hide/' + manga.id, 'POST')
         .then(() => {
           const index = this.listOfManga.indexOf(manga);
           this.listOfManga[index].hidden = !this.listOfManga[index].hidden
@@ -147,7 +154,7 @@ const app = new Vue({
 
       this.error = null;
       if (confirm("Do you really want to delete?")) {
-        request('/api/manga/delete/' + manga.id, 'DELETE')
+        _request('/api/manga/delete/' + manga.id, 'DELETE')
           .then(() => {
             this.listOfManga.splice(this.listOfManga.indexOf(manga), 1);
           })
@@ -183,7 +190,7 @@ const auth = new Vue({
         this.errors.push('password required.');
       }
 
-      request('/auth/login', 'POST',
+      _request('/auth/login', 'POST',
         { email: this.email, password: this.password })
         .then(() => {
           location.reload();
@@ -192,7 +199,7 @@ const auth = new Vue({
     },
     logout: function (event) {
       if (event) event.preventDefault()
-      request('/auth/logout', 'POST')
+      _request('/auth/logout', 'POST')
         .then(() => {
           location.reload();
         })
@@ -204,12 +211,22 @@ const auth = new Vue({
 })
 
 app.error = null;
-request('/api/mangas', 'GET')
-  .then((listOfManga) => {
+
+_request('/api/mangas', 'GET')
+  .then(function (listOfManga) {
+    for (let manga of listOfManga) {
+      manga.editedUrl = manga.url.replace('%%N%%', manga.pageNum)
+      manga.nextUrl = manga.url.replace('%%N%%', manga.pageNum + 1)
+      manga.hasNext = false
+      _request('/api/tst', 'POST', { url: manga.nextUrl }).then(function (data) {
+        manga.hasNext = data.result
+      })
+    }
     app.listOfManga = listOfManga
     auth.isUserLoggedIn = true
   })
   .catch((error) => {
     app.error = error
     auth.isUserLoggedIn = false
+    _request('/auth/cleanUpExpiredSessions', 'GET')
   });

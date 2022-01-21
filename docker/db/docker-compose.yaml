@@ -2,19 +2,26 @@ version: "3.3"
 
 services:
   db:
-    image: postgres
+    # image: postgres
+    image: postgres:11.14-alpine3.15
     environment:
       - "POSTGRES_DB=mangamanager"
       - "POSTGRES_USER=manman"
       - "POSTGRES_PASSWORD=man-man-pwd"
     volumes:
       - ./data/db:/var/lib/postgresql/data
-    networks:
-      - postgre
+    # networks:
+    #   - postgre
     ports:
       - 5432:5432
 
-networks:
-  postgre:
-    external: true
+# networks:
+#   postgre:
+#     external: true
 
+
+networks:
+  default:
+    ipam:
+      config:
+      - subnet: 172.24.25.0/24

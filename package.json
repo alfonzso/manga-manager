@@ -27,6 +27,8 @@
     "@foal/core": "^2.0.0",
     "@foal/password": "^2.7.1",
     "@foal/typeorm": "^2.0.0",
+    "axios": "^0.25.0",
+    "cheerio": "^1.0.0-rc.10",
     "pg": "^8.7.1",
     "source-map-support": "~0.5.19",
     "typeorm": "^0.2.41"
@@ -43,7 +45,7 @@
     "mocha": "^8.4.0",
     "supertest": "~6.0.0",
     "supervisor": "~0.12.0",
-    "typescript": "~4.0.2"
+    "typescript": "^4.5.5"
   },
   "main": ".eslintrc.js",
   "author": ""

@@ -1,8 +1,10 @@
-import { Context, Get, Post, Delete, HttpResponseOK, HttpResponseCreated, HttpResponseNotFound, HttpResponseNoContent, Patch, UserRequired, verifyPassword, Store, createSession } from '@foal/core';
-import { dependency, UseSessions, ValidateBody, HttpResponseUnauthorized } from '@foal/core';
-import { fetchUser } from '@foal/typeorm';
-import { hashPassword, Session, } from '@foal/core';
-import { User, Manga } from '../entities';
+import {
+  Context, Get, Post, Delete, HttpResponseOK, HttpResponseCreated,
+  HttpResponseNotFound, HttpResponseNoContent, Patch, UserRequired
+} from '@foal/core';
+import { Manga } from '../entities';
+import * as cheerio from 'cheerio';
+import axios from 'axios';
 
 @UserRequired()
 export class ApiController {
@@ -123,5 +125,16 @@ export class ApiController {
     return new HttpResponseNoContent();
   }
 
+  @Post('/tst')
+  async tstPost(ctx: Context) {
+    const res = await axios.get(ctx.request.body.url);
+    const $ = cheerio.load(res.data);
+
+    return new HttpResponseOK(
+      {
+        result: $("title").text().toLocaleLowerCase().includes("chapter")
+      }
+    );
+  }
 
 }
