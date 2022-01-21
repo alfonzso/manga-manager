@@ -44,8 +44,13 @@
     <div class="box">
       <h1>Manga Manager</h1>
       <div class="row" v-for="manga in orderedNotHiddenMangas" :key="manga.id">
-        {{ testit(manga.nextUrl) }}
-        <div class="star"> <a :href="manga.editedUrl" target="_blank"> * </a> </a></div>
+        <div class="star">
+          <a
+            :href="manga.editedUrl"
+            style="text-decoration: none;"
+            v-bind:style=" manga.hasNext ? 'background-color: greenyellow;' : ''" target="_blank"> *
+          </a>
+        </div>
         <div class="url">{{ manga.name }}</div>
         <div class="spacer"></div>
         <div class="pageNum">
@@ -113,7 +118,6 @@
   </div>
 
   <script src="https://vuejs.org/js/vue.min.js"></script>
-  <!-- <script data-main="script" src="require.js"></script> -->
   <script type="module" src="script.js"></script>
 </body>
 
