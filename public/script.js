@@ -66,6 +66,10 @@ const app = new Vue({
     },
   },
   methods: {
+    testit: function (txt) {
+      // e.preventDefault();
+      console.log(txt)
+    },
     modifyMangaPageNumber: function (manga, event) {
       if (event) event.preventDefault()
 
@@ -214,3 +218,43 @@ request('/api/mangas', 'GET')
     auth.isUserLoggedIn = false
     request('/auth/cleanUpExpiredSessions', 'GET')
   });
+// request('https://w12.mangafreak.net/Read1_Onepunch_Man_157', 'GET').then(p => console.log(p)).catch((error) => {
+//   console.log(error)
+// });
+
+const headers = new Headers();
+headers.set('Access-Control-Allow-Origin', '*');
+
+// const init = {
+//   method: HTTP_METHODS.GET,
+//   headers
+// };
+// fetch('https://w12.mangafreak.net/Read1_Onepunch_Man_157', init).then(p => console.log(p))
+fetch(
+  'https://w12.mangafreak.net/Read1_Onepunch_Man_158', {
+  method: 'GET',
+  redirect: 'error',
+  mode: 'no-cors',
+  // body: JSON.stringify(''),
+  headers: {
+    'Content-Type': 'application/json',
+    // 'Access-Control-Allow-Origin': '*'
+  }
+})
+  .then(resp => console.log(resp))
+  .catch(function (err) {
+    console.info(err + " <==== ");
+  });
+// .catch(p => console.log(p))
+// fetch(
+//   'https://w12.mangafreak.net/Read1_Onepunch_Man_156', {
+//   method: 'GET',
+//   mode: 'no-cors',
+//   // body: JSON.stringify(''),
+//   headers: {
+//     'Content-Type': 'application/json',
+//     'Access-Control-Allow-Origin': '*'
+//   }
+// })
+// .then(p => console.log(p))
+// .catch(p => console.log(p))

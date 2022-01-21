@@ -14,7 +14,6 @@
 
   <a href="#" onclick="yourlink()">Open all mangas</a>
   <script>
-
     function yourlink() {
       [...document.querySelectorAll('.star > a')].forEach(
         (element, index, array) => {
@@ -45,7 +44,8 @@
     <div class="box">
       <h1>Manga Manager</h1>
       <div class="row" v-for="manga in orderedNotHiddenMangas" :key="manga.id">
-        <div class="star"> <a :href="manga.url.replace('%%N%%',manga.pageNum)" target="_blank"> * </a> </a></div>
+        {{ testit("manga.url") }}
+        <div class="star"> <a :href="manga.url.replace('%%N%%', manga.pageNum)" target="_blank"> * </a> </a></div>
         <div class="url">{{ manga.name }}</div>
         <div class="spacer"></div>
         <div class="pageNum">
