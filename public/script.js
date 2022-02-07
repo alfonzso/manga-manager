@@ -20,30 +20,27 @@ function _request(url, method, body) {
   });
 }
 
-const app = new Vue({
-  el: '#app',
-  data: {
-    pageNumTimer: [],
-    adminTimer: [],
-    hiddenToggle: false,
-    adminToggle: false,
-    newMangaText: '',
-    listOfManga: [
-      // {
-      //   id: 1,
-      //   text: 'Donald Duck'
-      // }
-    ],
-    error: null,
-    errors: [],
-    mangaName: null,
-    mangaUrl: null,
-    updateMangaName: null,
-    updateMangaUrl: null,
-    updateMangaOrder: null,
-    testObject: {},
+const app = Vue.createApp({
+  data() {
+    return {
+      pageNumTimer: [],
+      adminTimer: [],
+      hiddenToggle: false,
+      adminToggle: false,
+      newMangaText: '',
+      listOfManga: [],
+      error: null,
+      errors: [],
+      mangaName: null,
+      mangaUrl: null,
+      updateMangaName: null,
+      updateMangaUrl: null,
+      updateMangaOrder: null,
+      testObject: {},
+    }
   },
   computed: {
+
     notHiddenMangas: function () {
       return this.listOfManga.filter(manga => manga.hidden === false)
     },
@@ -69,10 +66,6 @@ const app = new Vue({
     },
   },
   methods: {
-    testit: function (txt) {
-      // e.preventDefault();
-      // console.log(txt)
-    },
     modifyMangaPageNumber: function (manga, event) {
       if (event) event.preventDefault()
 
@@ -165,17 +158,16 @@ const app = new Vue({
     },
 
   }
-});
+}).mount('#app')
 
-
-const auth = new Vue({
-  el: '#auth',
-  data: {
-    // counter: 0,
-    errors: [],
-    isUserLoggedIn: false,
-    email: null,
-    password: null,
+const auth = Vue.createApp({
+  data() {
+    return {
+      errors: [],
+      isUserLoggedIn: false,
+      email: null,
+      password: null,
+    }
   },
   methods: {
     login: function (event) {
@@ -208,7 +200,7 @@ const auth = new Vue({
         });
     },
   }
-})
+}).mount('#auth')
 
 app.error = null;
 
@@ -218,11 +210,13 @@ _request('/api/mangas', 'GET')
       manga.editedUrl = manga.url.replace('%%N%%', manga.pageNum)
       manga.nextUrl = manga.url.replace('%%N%%', manga.pageNum + 1)
       manga.hasNext = false
+    }
+    app.listOfManga = listOfManga
+    for (let manga of app.listOfManga) {
       _request('/api/tst', 'POST', { url: manga.nextUrl }).then(function (data) {
         manga.hasNext = data.result
       })
     }
-    app.listOfManga = listOfManga
     auth.isUserLoggedIn = true
   })
   .catch((error) => {
