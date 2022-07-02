@@ -3,7 +3,7 @@ WORKDIR /tmp/manga_manager/
 
 RUN  apk add python3 alpine-sdk curl
 COPY . /tmp/manga_manager/
-RUN npm version && npm ci && npm run build
+RUN npm version && npm ci && npm run prodbuild
 
 # remove development dependencies
 RUN npm prune --production
