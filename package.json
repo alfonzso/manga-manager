@@ -5,6 +5,7 @@
   "license": "MIT",
   "repository": {},
   "scripts": {
+    "prebuild": "cd frontend && npm run build",
     "build": "foal rmdir build && tsc -p tsconfig.app.json",
     "start": "node ./build/index.js",
     "develop": "npm run build && concurrently \"tsc -p tsconfig.app.json -w\" \"supervisor -w ./build,./config -e js,json,yml --no-restart-on error ./build/index.js\"",
