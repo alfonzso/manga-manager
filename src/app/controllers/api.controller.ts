@@ -4,7 +4,7 @@ import {
 } from '@foal/core';
 import { Manga } from '../entities';
 import * as cheerio from 'cheerio';
-import axios from 'axios';
+import axios, { AxiosResponse } from 'axios';
 
 @UserRequired()
 export class ApiController {
@@ -125,14 +125,22 @@ export class ApiController {
     return new HttpResponseNoContent();
   }
 
-  @Post('/tst')
+  @Post('/nextChapterChecker')
   async tstPost(ctx: Context) {
-    const res = await axios.get(ctx.request.body.url);
-    const $ = cheerio.load(res.data);
+    const { mangas } = ctx.request.body
+
+    const axiosGetss = mangas.map(manga => {
+      return axios.get(manga.url).then((reqResult) => {
+        return {
+          'id': manga.id,
+          'value': cheerio.load(reqResult.data)("title").text().toLocaleLowerCase().includes("chapter")
+        };
+      })
+    })
 
     return new HttpResponseOK(
       {
-        result: $("title").text().toLocaleLowerCase().includes("chapter")
+        results: await Promise.all(axiosGetss)
       }
     );
   }

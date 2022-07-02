@@ -1,0 +1,1 @@
+kubectl -n man-man port-forward svc/manga-manager-postgresql 35432:5432
