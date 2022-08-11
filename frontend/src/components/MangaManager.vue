@@ -112,7 +112,9 @@ export default {
         _request('/auth/cleanUpExpiredSessions', 'GET')
       });
 
-    this.emitter.on("add-new-manga", (event) => this.addNewManga(event));
+    // this.emitter.on("add-new-manga", (obj, event) => this.addNewManga(obj, event))
+    this.emitter.on("add-new-manga", (obj) => this.addNewManga(obj))
+    // this.emitter.on("add-new-manga", (n, u, event) => this.addNewManga(n, u, event))
     this.emitter.on("hide-manga", (manga, event) => this.hideManga(manga, event))
     this.emitter.on("modify-manga-page-number", (manga, event) => this.modifyMangaPageNumber(manga, event));
     this.emitter.on("update-manga", (manga, event) => this.updateManga(manga, event))
@@ -156,18 +158,18 @@ export default {
       // this.mangaPageNumber = -1;
     },
 
-    addNewManga: function (e) {
-      e.preventDefault();
+    addNewManga: function (obj) {
+      if (obj.e) obj.e.preventDefault();
       this.errors = [];
 
-      if (!this.mangaName) {
+      if (!obj.mangaName) {
         this.errors.push('Manga name required.');
       }
-      if (!this.mangaUrl) {
+      if (!obj.mangaUrl) {
         this.errors.push('Manga url required.');
       }
 
-      _request('/api/manga', 'POST', { name: this.mangaName, url: this.mangaUrl })
+      _request('/api/manga', 'POST', { name: obj.mangaName, url: obj.mangaUrl })
         .then(manga => this.listOfManga.push(manga))
         .catch(error => this.error = error);
 

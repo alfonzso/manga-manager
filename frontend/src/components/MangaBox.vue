@@ -2,7 +2,7 @@
   <h1>Manga Manager</h1>
 
   <div class="row">
-    <div class="star" style="padding: 1px;" >
+    <div class="star" style="padding: 1px;">
       <div v-if="loading" class="loader"></div>
     </div>
     <div class="url"> </div>
@@ -34,6 +34,8 @@
 </template>
 
 <script>
+import { eachMapping } from '@jridgewell/trace-mapping';
+
 
 export default {
   name: 'MangaBox',
@@ -51,8 +53,8 @@ export default {
     hideManga(manga, event) {
       this.emitter.emit("hide-manga", manga, event);
     },
-    addNewManga(event) {
-      this.emitter.emit("add-new-manga", event);
+    addNewManga(e) {
+      this.emitter.emit("add-new-manga", { mangaName: this.mangaName, mangaUrl: this.mangaUrl, e });
     },
   },
 
