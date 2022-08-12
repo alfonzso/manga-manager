@@ -6,24 +6,13 @@ import { Manga } from '../entities';
 import * as cheerio from 'cheerio';
 import axios, { AxiosResponse } from 'axios';
 
+type nextChapterCheckerRequestType = {
+  mangas: Manga[]
+  debug?: boolean
+}
+
 @UserRequired()
 export class ApiController {
-
-  // @dependency
-  // store: Store;
-
-  // @Get('/')
-  // index(ctx: Context) {
-  //   return new HttpResponseOK('Hello world!');
-  // }
-
-  // @Get('/tst')
-  // @Post('/tst')
-  // async tst(ctx: Context) {
-  //   // const listOfManga = await Manga.find();
-  //   console.log(ctx.user)
-  //   return new HttpResponseOK();
-  // }
 
   @Get('/mangas')
   async getMangas() {
@@ -125,17 +114,45 @@ export class ApiController {
     return new HttpResponseNoContent();
   }
 
+  debugUrlCallStart = (msg: string, debug: boolean = false, startNeeded = true) => {
+    if (debug) {
+      if (startNeeded) console.log("started " + msg)
+      console.time(msg)
+    }
+  }
+
+  debugUrlCallEnd = (msg: string, debug: boolean = false) => {
+    if (debug) {
+      console.timeEnd(msg)
+    }
+  }
+
   @Post('/nextChapterChecker')
   async tstPost(ctx: Context) {
-    const { mangas } = ctx.request.body
+    const { mangas, debug } = ctx.request.body as nextChapterCheckerRequestType
 
     const axiosGetss = mangas.map(manga => {
-      return axios.get(manga.url).then((reqResult) => {
-        return {
-          'id': manga.id,
-          'value': cheerio.load(reqResult.data)("title").text().toLocaleLowerCase().includes("chapter")
-        };
-      })
+      this.debugUrlCallStart("url: " + manga.url, debug)
+      return axios.get(manga.url)
+        .then((reqResult) => {
+          this.debugUrlCallEnd("url: " + manga.url, debug)
+          this.debugUrlCallStart("cheerio: " + manga.id, debug, false)
+          const value = cheerio.load(reqResult.data)("title").text().toLocaleLowerCase().includes("chapter")
+          this.debugUrlCallEnd("cheerio: " + manga.id, debug)
+
+          return {
+            'id': manga.id,
+            value
+          };
+        })
+        .catch(err => {
+          this.debugUrlCallEnd("url: " + manga.url, debug)
+          return {
+            'id': manga.id,
+            "value": false,
+            "error": err.message
+          };
+        })
     })
 
     return new HttpResponseOK(

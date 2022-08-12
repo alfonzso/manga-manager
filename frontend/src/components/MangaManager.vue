@@ -39,12 +39,17 @@ export default {
       listOfManga: [],
       err: null,
       errors: [],
+      debugCheck: false,
 
       updateMangaName: null,
       updateMangaUrl: null,
       updateMangaOrder: null,
       testObject: {},
     }
+  },
+  created() {
+    let urlParams = new URLSearchParams(window.location.search);
+    this.debugCheck = urlParams.has("debug")
   },
   computed: {
     notHiddenMangas: function () {
@@ -74,14 +79,6 @@ export default {
   mounted: function () {
     _request('/api/mangas', 'GET')
       .then((responseOfMangas) => {
-        // type Manga = {
-        //   id: number;
-        //   name: string;
-        //   url: string;
-        //   pageNum: number;
-        //   hidden: boolean;
-        //   order: number;
-        // }
 
         const mangasToCheck = []
         for (let manga of responseOfMangas) {
@@ -93,13 +90,10 @@ export default {
         this.listOfManga = responseOfMangas
 
         this.loading = true;
-        _request('/api/nextChapterChecker', 'POST', { mangas: mangasToCheck }).then((data) => {
-          for (let { id, value } of data.results) {
-            const oneManga = this.listOfManga.find(manga => manga.id === id)
-            if (oneManga) {
-              oneManga.hasNext = value
-            }
-          }
+        _request('/api/nextChapterChecker', 'POST', { mangas: mangasToCheck, debug: this.debugCheck }).then((data) => {
+          this.listOfManga.map((manga) => {
+            manga.hasNext = data.results.find(check => manga.id === check.id).value || false
+          })
           this.loading = false;
         })
 
